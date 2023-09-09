@@ -1,5 +1,8 @@
-const SVG_LOAD_TIME = 3000;
+const SVG_LOAD_TIME = 2000;
 const DEFAULT_LOAD_TIME = 500;
+
+const RESUME_LOCATION = "https://drive.google.com/file/d/1Vqvp0kF1FYGqbYXLmNUaqfrhcakdhEkD/view"
+const GIT_HOME = "https://raw.githubusercontent.com/hamsa-vd/resume/main/"
 
 const picWrapper = document.querySelector(".pic-wrapper")
 const contentWrapper = document.querySelector(".content")
@@ -20,7 +23,8 @@ async function delay(time = DEFAULT_LOAD_TIME){
 async function fetchSvg(){
     return new Promise(async resolve => {
         try {
-            const svgText = await (await fetch(picWrapper.dataset.svgSrc)).text()
+            const svgSrc = GIT_HOME + picWrapper.dataset.svgSrc
+            const svgText = await (await fetch(svgSrc)).text()
             const parser = new DOMParser();
             const svgEl = parser.parseFromString(svgText, 'image/svg+xml').documentElement
             resolve(svgEl)
@@ -47,7 +51,7 @@ async function lazyLoadSvg(paths, loadTime = SVG_LOAD_TIME){
 
 function loadImage(){
     const img = document.createElement("img")
-    img.src = "/assets/hamsa_pic.png"
+    img.src = GIT_HOME + picWrapper.dataset.imgSrc
     picWrapper.appendChild(img)
 }
 
@@ -68,4 +72,5 @@ async function loadContent(){
     resumeHome.removeChild(picWrapper)
     contentWrapper.classList.add("appear")
     await delay()
+    window.location.href = RESUME_LOCATION
 }
